@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import * as Sentry from "@sentry/nextjs";
+import { captureException, captureMessage, setContext } from "@sentry/nextjs";
 
 import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
@@ -8,7 +8,26 @@ import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/actions/patient.actions";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 
-// Define the props interface for the dynamic route
+// Define interfaces based on expected data structure
+interface User {
+  $id: string;
+  name: string;
+  // Add other fields as needed
+}
+
+interface Appointment {
+  $id: string;
+  primaryPhysician: string;
+  schedule: string;
+  // Add other fields as needed
+}
+
+interface Doctor {
+  name: string;
+  image: string;
+  // Add other fields as needed
+}
+
 interface SearchParamProps {
   params: Promise<{ userId: string }>; // params as Promise
   searchParams: Promise<{ appointmentId?: string }>; // searchParams as Promise
@@ -18,7 +37,10 @@ const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
   const { userId } = await params; // Await params to resolve userId
   const searchParamsData = await searchParams; // Await searchParams to resolve appointmentId
   const appointmentId = (searchParamsData?.appointmentId as string) || "";
-  let user, appointment, doctor;
+
+  let user: User | undefined;
+  let appointment: Appointment | undefined;
+  let doctor: Doctor | undefined;
 
   try {
     user = await getUser(userId);
@@ -43,11 +65,15 @@ const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
       throw new Error(`Doctor ${appointment.primaryPhysician} not found`);
     }
 
-    // Sentry metrics with safety check
-    if (Sentry?.metrics && user.name) {
-      Sentry.metrics.set("user_view_appointment-success", user.name);
+    // Sentry tracking with setContext instead of metrics
+    if (user.name) {
+      setContext("user_view", {
+        event: "appointment-success",
+        userId,
+        userName: user.name,
+      });
     } else {
-      Sentry.captureMessage(`User ${userId} has no name for metrics`, "warning");
+      captureMessage(`User ${userId} has no name for tracking`, "warning");
     }
   } catch (error) {
     console.error("Error in RequestSuccess page:", error);
