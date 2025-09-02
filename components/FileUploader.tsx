@@ -13,7 +13,7 @@ interface FileUploaderProps {
 const FileUploader = ({ files, onChange }: FileUploaderProps) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onChange(acceptedFiles);
-  }, []);
+  }, [onChange]); // Added onChange to dependency array
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
