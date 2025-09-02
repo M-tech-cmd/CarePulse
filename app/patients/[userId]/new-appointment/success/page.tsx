@@ -34,8 +34,8 @@ interface SearchParamProps {
 }
 
 const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
-  const { userId } = await params; // Await params to resolve userId
-  const searchParamsData = await searchParams; // Await searchParams to resolve appointmentId
+  const { userId } = await params;
+  const searchParamsData = await searchParams;
   const appointmentId = (searchParamsData?.appointmentId as string) || "";
 
   try {
@@ -55,13 +55,14 @@ const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
       throw new Error(`Appointment with ID ${appointmentId} not found`);
     }
 
+    // TypeScript now knows appointment is defined past this point
     const doctor = Doctors.find((doc) => doc.name === appointment.primaryPhysician);
 
     if (!doctor) {
       throw new Error(`Doctor ${appointment.primaryPhysician} not found`);
     }
 
-    // Sentry tracking with setContext instead of metrics
+    // Sentry tracking with setContext
     if (user.name) {
       Sentry.setContext("user_view", {
         event: "appointment-success",
@@ -72,7 +73,6 @@ const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
       Sentry.captureMessage(`User ${userId} has no name for tracking`, "warning");
     }
 
-    // Return the success page - all variables are guaranteed to exist here
     return (
       <div className="flex h-screen max-h-screen px-[5%]">
         <div className="success-img">
