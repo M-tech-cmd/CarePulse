@@ -1,69 +1,117 @@
-# CarePulse
+# CarePulse 🏥💙
 
-> A healthcare app for managing patients' appointments with SMS notification.
+A **Patient Management System** healthcare platform that streamlines patient registration, appointment scheduling, and medical records management. CarePulse also integrates **complex forms**, **file uploads**, and **SMS notifications** for a complete digital healthcare experience.
 
-## Built With
+---
 
-- Major languages: TypeScript
-- Backend: Appwrite.io
-- Framework: Next.js
-- Tools used: Twilio, Sentry
-- Styling: TailwindCSS, shadcn/ui
+## 📋 Features
 
-## Screenshots
+👉 **Register as a Patient** – Users can sign up and create a personal profile.
+👉 **Book Appointments** – Patients can schedule one or multiple appointments with doctors.
+👉 **Admin Appointment Management** – Admins can view, confirm, reschedule, or cancel appointments.
+👉 **SMS Notifications** – Appointment confirmations and updates are sent via SMS using Twilio.
+👉 **File Upload with Appwrite Storage** – Patients can securely upload and store files.
+👉 **Full Responsiveness** – Works smoothly across all devices and screen sizes.
+👉 **Performance Monitoring** – Integrated with Sentry to track application performance and errors.
+👉 **Code Reusability & Architecture** – Built with a modular and scalable structure.
 
-### Sign up page
+---
 
-![Home](/public/assets/images/Carepulse_home.png)
+## 🛠 Tech Stack
 
-### Admin Dashboard
+* **Frontend:** Next.js, TypeScript, TailwindCSS, ShadCN
+* **Backend & Services:** Appwrite (Auth, Database, File Storage)
+* **Notifications:** Twilio (SMS Integration)
+* **Monitoring:** Sentry
 
-![Admin Dashboard](/public/assets/images/Carepulse_admin.png)
+---
 
-## Live Link
+## 🏗️ System Architecture
 
-You can view the current deployment by clicking the link bellow:
+```mermaid
+graph TD;
+    User[Patient / Admin] -->|Interacts| UI[Next.js Frontend];
+    UI --> Appwrite[Appwrite Backend];
+    Appwrite -->|Authentication / Database / File Storage| Appwrite;
+    Appwrite --> Twilio[Twilio SMS Service];
+    Appwrite --> Sentry[Sentry Monitoring];
+```
 
-[Live Demo site](https://carepulse-lovat.vercel.app/)
+---
 
-## Deployment
+## 📂 Folder Structure
 
-Deploy your project with [Vercel](https://vercel.com/)
+```
+CarePulse/
+│── src/
+│   ├── app/             # Next.js app routes & pages
+│   ├── components/      # Reusable UI components
+│   ├── lib/             # Utility functions & config
+│   ├── styles/          # Global styles (Tailwind)
+│   └── hooks/           # Custom React hooks
+│
+│── public/              # Static assets & favicon
+│── .env.local           # Environment variables (Appwrite, Twilio, etc.)
+│── README.md            # Project documentation
+```
 
-## Getting Started
+---
 
-To get a local copy up and running follow these simple example steps.
+## 🚀 Getting Started
 
-- Clone the project to your local machine using `git clone https://github.com/Hombre2014/carepulse.git`
-- `cd carepulse` into the project directory
-- Run `npm install` to install the necessary packages
-- have a look at the `.env.example` file and create a `.env.local` file with the necessary environment variables
-- For the demo site the `NEXT_PUBLIC_ADMIN_PASSKEY=123456`
-- Run `npm run dev` to start the development server
-- Open your browser and go to `http://localhost:3000/`
+1️⃣ Clone the repo:
 
-## Author
+```bash
+git clone https://github.com/your-username/carepulse.git
+cd carepulse
+```
 
-👤 **Yuriy Chamkoriyski**
+2️⃣ Install dependencies:
 
-- GitHub: [@Hombre2014](https://github.com/Hombre2014)
-- Twitter: [@Chamkoriyski](https://twitter.com/Chamkoriyski)
-- LinkedIn: [axebit](https://linkedin.com/in/axebit)
+```bash
+npm install
+```
+
+3️⃣ Set up environment variables in `.env.local`:
+
+```env
+NEXT_PUBLIC_APPWRITE_ENDPOINT=your_appwrite_endpoint
+NEXT_PUBLIC_APPWRITE_PROJECT=your_project_id
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_PHONE_NUMBER=your_twilio_number
+```
+
+4️⃣ Run the development server:
+
+```bash
+npm run dev
+```
+
+---
+
+## 📱 Screenshots
+
+(Add some UI previews here – login page, appointment booking, admin panel)
+
+---
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome!
+Contributions are welcome! Feel free to open issues and submit PRs.
 
-Feel free to check the [issues page](https://github.com/Hombre2014/carepulse/issues).
+---
 
-## Show your support
+## 📜 License
 
-Give a ⭐️ if you like this project!
+This project is licensed under the **MIT License**.
 
-## Acknowledgments
+---
 
-Thanks to JavaScript Mastery for inspirational [video](https://www.youtube.com/watch?v=lEflo_sc82g).
+## 🙌 Acknowledgements
 
-## 📝 License
-
-This project is [MIT](./license.md) licensed.
+* [Next.js](https://nextjs.org/)
+* [Appwrite](https://appwrite.io/)
+* [Twilio](https://www.twilio.com/)
+* [Sentry](https://sentry.io/)
+* [ShadCN](https://ui.shadcn.com/)
