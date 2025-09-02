@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as Sentry from "@sentry/nextjs";
+import { captureException, captureMessage, setContext } from "@sentry/nextjs";
 
 import { getPatient } from "@/lib/actions/patient.actions";
 import AppointmentForm from "@/components/forms/AppointmentForm";
@@ -21,15 +21,19 @@ export default async function NewAppointment({ params }: SearchParamProps) {
       throw new Error(`Patient with ID ${userId} not found`);
     }
 
-    // Sentry metrics with safety check
-    if (Sentry?.metrics && patient.name) {
-      Sentry.metrics.set("user_view_new-appointment", patient.name);
+    // Sentry tracking with setContext instead of metrics
+    if (patient.name) {
+      setContext("user_view", {
+        event: "new-appointment",
+        userId,
+        patientName: patient.name,
+      });
     } else {
-      Sentry.captureMessage(`Patient ${userId} has no name for metrics`, "warning");
+      captureMessage(`Patient ${userId} has no name for tracking`, "warning");
     }
   } catch (error) {
     console.error("Error fetching patient in NewAppointment page:", error);
-    Sentry.captureException(error, { extra: { userId } });
+    captureException(error, { extra: { userId } });
     return (
       <div className="flex items-center justify-center h-screen text-red-500">
         ⚠️ Error loading appointment page. Please try again or contact support.
@@ -55,7 +59,7 @@ export default async function NewAppointment({ params }: SearchParamProps) {
             patientId={patient.$id}
           />
 
-          <p className="copyright mt-10 py-12">© {new Date().getFullYear()} CarePulse</p> {/* Updated to dynamic year */}
+          <p className="copyright mt-10 py-12">© {new Date().getFullYear()} CarePulse</p>
         </div>
       </section>
 
