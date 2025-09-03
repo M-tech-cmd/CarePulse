@@ -1,29 +1,24 @@
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import Image from 'next/image';
+import * as Sentry from '@sentry/nextjs';
 
-import RegisterForm from "@/components/forms/RegisterForm";
-import { getPatient, getUser } from "@/lib/actions/patient.actions";
-
-// Define the props interface for the dynamic route
-interface SearchParamProps {
-  params: { userId: string }; // Plain object, not a Promise
-}
+import { getUser } from '@/lib/actions/patient.actions';
+import RegisterForm from '@/components/forms/RegisterForm';
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
   const user = await getUser(userId);
-  const patient = await getPatient(userId);
 
-  if (patient) redirect(`/patients/${userId}/new-appointment`);
+  Sentry.metrics.set('user_view_register', user.name);
 
   return (
     <div className="flex h-screen max-h-screen">
+      {/* TODO: OTP Verification | PasskeyModal */}
       <section className="remove-scrollbar container">
-        <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
+        <div className="sub-container max-w-[860px] flex-a flex-col py-10">
           <Image
             src="/assets/icons/logo-full.svg"
-            height={1000}
             width={1000}
-            alt="patient"
+            height={1000}
+            alt="logo"
             className="mb-12 h-10 w-fit"
           />
 
@@ -35,8 +30,8 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
 
       <Image
         src="/assets/images/register-img.png"
-        height={1000}
         width={1000}
+        height={1000}
         alt="patient"
         className="side-img max-w-[390px]"
       />
