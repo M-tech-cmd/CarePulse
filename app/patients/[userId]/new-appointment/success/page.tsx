@@ -97,7 +97,7 @@ const RequestSuccess = async ({ params, searchParams }: SearchParamProps) => {
               Your <span className="text-green-500">appointment request</span> has
               been successfully submitted!
             </h2>
-            <p>We'll be in touch shortly to confirm.</p>
+            <p>We&apos;ll be in touch shortly to confirm.</p> {/* Fixed line */}
           </section>
 
           <section className="request-details">
