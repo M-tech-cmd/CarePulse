@@ -4,10 +4,22 @@ import * as Sentry from '@sentry/nextjs';
 import { getUser } from '@/lib/actions/patient.actions';
 import RegisterForm from '@/components/forms/RegisterForm';
 
-const Register = async ({ params: { userId } }: SearchParamProps) => {
-  const user = await getUser(userId);
+// Correct type for dynamic route props
+interface RegisterPageProps {
+  params: {
+    userId: string;
+  };
+}
 
-  Sentry.metrics.set('user_view_register', user.name);
+const Register = async ({ params }: RegisterPageProps) => {
+  const user = await getUser(params.userId);
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  // Safe Sentry usage
+  Sentry.metrics.set('user_view_register', user.name || 'unknown');
 
   return (
     <div className="flex h-screen max-h-screen">
