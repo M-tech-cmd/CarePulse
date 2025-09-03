@@ -6,7 +6,7 @@ import { getPatient, getUser } from "@/lib/actions/patient.actions";
 
 // Define the props interface for the dynamic route
 interface SearchParamProps {
-  params: { userId: string };
+  params: { userId: string }; // Plain object, not a Promise
 }
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
@@ -29,7 +29,7 @@ const Register = async ({ params: { userId } }: SearchParamProps) => {
 
           <RegisterForm user={user} />
 
-          <p className="copyright py-12">© 2024 CarePulse</p> {/* Fixed typo: CarePluse -> CarePulse */}
+          <p className="copyright py-12">© 2024 CarePulse</p>
         </div>
       </section>
 
