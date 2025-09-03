@@ -22,14 +22,20 @@ const Register = async ({ params }: SearchParamProps) => {
       throw new Error(`User with ID ${userId} not found`);
     }
 
-    // Fixed Sentry metrics call
-    if (Sentry?.metrics && user.name) {
+    // Custom metrics tracking using Sentry transaction/span
+    if (user.name) {
       try {
-        Sentry.metrics.increment("user_view_register", 1, {
-          tags: { user: user.name }
+        Sentry.startTransaction({
+          name: "user_view_register",
+          op: "metrics",
+        }, (span) => {
+          span.setData("user", user.name);
+          span.setTag("event", "register-view");
+          // Simulate increment by setting a custom metric
+          span.setMeasurement("user_view_count", 1);
         });
       } catch (sentryError) {
-        console.warn('Sentry metrics failed:', sentryError);
+        console.warn("Sentry metrics tracking failed:", sentryError);
       }
     } else {
       Sentry.captureMessage(`User ${userId} has no name for metrics`, "warning");
