@@ -5,7 +5,7 @@ const nextConfig = {
   // Enable Turbopack (Next.js new bundler)
   turbopack: {},
   reactStrictMode: true,
-  swcMinify: true,
+  // ❌ swcMinify is no longer needed in Next.js 15
 };
 
 export default withSentryConfig(
@@ -21,7 +21,7 @@ export default withSentryConfig(
   },
   {
     // Additional build options (recommended by Sentry)
-    hideSourceMaps: true, // don’t serve .map files to users
-    transpileClientSDK: true, // improves Sentry SDK tree-shaking
+    hideSourceMaps: true,      // don’t serve .map files to users
+    transpileClientSDK: true,  // improves Sentry SDK tree-shaking
   }
 );
